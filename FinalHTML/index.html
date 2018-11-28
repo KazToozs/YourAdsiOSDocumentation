@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-okaidia.min.css" />
+    <title>YourAds Documentation</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col s6 offset-s3" style="padding-left: 150px; padding-right: 150px">
+            <img src="public/images/yourads.png" width="640" height="433" style="margin-left: auto; margin-right: auto; display: block;">
+            <h1 style="text-align: center; color: rgba(167, 38, 32, 1); margin-top: 0px">Documentation</h1>
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title"><b>Introduction</b></span>
+                    <p>Cette partie de la documentation couvre la partie mobile iOS de YourAds.
+                        YourAds étant un module SDK que l’on installe en ajout à un autre projet informatique, ce
+                        document explique les prérequis, l’installation, et l’utilisation dans un contexte d’une
+                        application qui tourne cette SDK.</p>
+                    <br>
+                    <span class="card-title"><b>Prérequis</b></span>
+                    <p>Pour utiliser YourAds dans votre projet, utilisez les outils suivants :</p>
+
+                    <li> - Ordinateur tournant sous macOS
+                        <ul>
+                            <li> - Xcode 9+</li>
+                            <li> - Une interface de shell (iTerm)</li>
+                            <li> - CocoaPods 1.4+</li>
+                        </ul>
+                    </li>
+                    <li> - iPhone (testé seulement sur iPhone 6S)
+                        <ul>
+                            <li> - iOS 8+</li>
+                        </ul>
+                    </li>
+                    <li> - Câble de chargement de l’iPhone</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SDK IMPORT -->
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title"><b>Importer le CocoPod</b></span>
+                    <p>
+                        1. Votre projet doit être initialisé pour utiliser CocoaPods, un dependency manager pour iOS.
+                        Dans le root de votre projet Xcode, lancez la commande suivante dans un shell :
+                        <pre><code class="language-swift">pod init</code></pre>
+                        Ceci créera le fichier Podfile : le fichier de paramétrage pour les Pods de votre projet.
+                        Pour plus d’informations sur la structure des Podfiles :
+                        <a href="https://guides.cocoapods.org/using/the-podfile.html">https://guides.cocoapods.org/using/the-podfile.html</a>
+                    </p>
+
+                    <p>2.	C’est ici que vous mettrez les dependencies suivants dont vous aurez besoin pour utiliser YourAdsSDK :</p>
+                    <pre><code class="language-swift">pod ‘YourAds’, :path => ‘[PATH VERS SDK]’</code></pre>
+
+                    <p>3.	Pour installer les dependencies, lancez la commande suivante :</p>
+                    <pre><code class="language-swift">pod install</code></pre>
+                </div>
+            </div>
+
+            <!-- SDK USING -->
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title"><b>Utilistation du Pod iOS</b></span>
+
+                    <!--INIT SNIPPET-->
+                    <span class="card-title">Initialisation</span>
+                    <p><b>Importez</b> YourAds. Il se peut qu'il ne soit pas reconnu par XCode avant la compilation; ignorez cette erreur. Ajoutez un objet YourAdsHelper dans le controller d'où vous voulez lancer le controller YourAds pour le visionnage des publicités et assurez qu'il soit bien initialisé avant tout autre action.</p>
+                    <pre><code class="language-swift">import YourAdsSDK
+                        
+class ViewController: UICollectionViewController {
+let yourAdsHelper: YourAdsHelper
+                        
+required init?(coder aDecoder: NSCoder) {
+    yourAdsHelper = YourAdsHelper()
+    super.init(coder: aDecoder)
+}
+                </code></pre>
+
+                    <!--LISTENER SNIPPET-->
+                    <span class="card-title">Storyboard</span>
+                    <p>Mettre en place un <b>segue</b> vers YourAdsController à travers un Storyboard Reference dans votre storyboard. La reference doit avoir les détails suivants en paramètre :
+                        <img src="./images/storyboard.png"/>
+
+                    <!--LOAD SNIPPET-->
+                    <span class="card-title">Load</span>
+                    <p>Dans votre controller actuel, ajoutez le code suivant pour permettre une initialisation correcte de YourAdsController en lui indiquant à partir d’où il va jouer dès son activation ; vous devrez insérer vos propres détails de storyboard ici dont son ‘Storyboard ID’ qui se trouve dans l’inspecteur.
+                    <pre><code class="language-swift">override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if let destinationVC = segue.destination as? YourAdsController {
+        if (segue.identifier == "yourSegue") {
+            destinationVC.yourAdsHelper = yourAdsHelper
+            destinationVC.previousStoryboardName = "Main"
+            destinationVC.previousControllerId = "ViewController"
+        }
+    }
+}
+                </code></pre>
+
+                    <span class="card-title">Show</span>
+<p>En lançant votre segue, le YourAdsController devra maintenant se présenter, tourner une publicité, enregistrer les données de la caméra et revenir à votre controller initial après le visionage de la publicité ou en appuyant sur le boutton back.</p>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/prism.min.js"></script>
+
+</html>
